@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_06_162509) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_06_162859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bills", force: :cascade do |t|
+    t.bigint "customer_profile_id", null: false
+    t.bigint "water_reading_id", null: false
+    t.decimal "amount"
+    t.date "due_date"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_profile_id"], name: "index_bills_on_customer_profile_id"
+    t.index ["water_reading_id"], name: "index_bills_on_water_reading_id"
+  end
 
   create_table "customer_profiles", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -43,6 +55,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_162509) do
     t.index ["customer_profile_id"], name: "index_water_readings_on_customer_profile_id"
   end
 
+  add_foreign_key "bills", "customer_profiles"
+  add_foreign_key "bills", "water_readings"
   add_foreign_key "customer_profiles", "users"
   add_foreign_key "water_readings", "customer_profiles"
 end
