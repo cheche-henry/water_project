@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_06_162859) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_06_163853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,6 +33,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_162859) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_customer_profiles_on_user_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "bill_id", null: false
+    t.decimal "amount"
+    t.string "payment_method"
+    t.string "transaction_code"
+    t.datetime "paid_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_id"], name: "index_payments_on_bill_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -58,5 +69,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_162859) do
   add_foreign_key "bills", "customer_profiles"
   add_foreign_key "bills", "water_readings"
   add_foreign_key "customer_profiles", "users"
+  add_foreign_key "payments", "bills"
   add_foreign_key "water_readings", "customer_profiles"
 end
