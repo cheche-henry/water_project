@@ -7,4 +7,6 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :phone_number, presence: true, uniqueness: true
   validates :email, uniqueness: true, allow_blank: true
+
+  has_one :customer_profile, dependent: :destroy
 end
