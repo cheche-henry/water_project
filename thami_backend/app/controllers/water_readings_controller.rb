@@ -1,61 +1,54 @@
 class WaterReadingsController < ApplicationController
-  before_action :authorize_customer
   before_action :set_customer_profile
-  before_action :set_reading, only: [:show, :update, :destroy]
+  before_action :set_water_reading, only: [:show, :update, :destroy]
 
-  # GET /water_readings
+  # GET /customer_profiles/:customer_profile_id/water_readings
   def index
-    readings = @customer_profile.water_readings
-    render json: readings
+    @water_readings = @customer_profile.water_readings
+    render json: @water_readings
   end
 
-  # GET /water_readings/:id
+  # GET /customer_profiles/:customer_profile_id/water_readings/:id
   def show
-    render json: @reading
+    render json: @water_reading
   end
 
-  # POST /water_readings
+  # POST /customer_profiles/:customer_profile_id/water_readings
   def create
-    reading = @customer_profile.water_readings.new(water_reading_params)
-    if reading.save
-      render json: reading, status: :created
+    @water_reading = @customer_profile.water_readings.new(water_reading_params)
+    if @water_reading.save
+      render json: @water_reading, status: :created
     else
-      render json: { errors: reading.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @water_reading.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /water_readings/:id
+  # PATCH/PUT /customer_profiles/:customer_profile_id/water_readings/:id
   def update
-    if @reading.update(water_reading_params)
-      render json: @reading
+    if @water_reading.update(water_reading_params)
+      render json: @water_reading
     else
-      render json: { errors: @reading.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @water_reading.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  # DELETE /water_readings/:id
+  # DELETE /customer_profiles/:customer_profile_id/water_readings/:id
   def destroy
-    @reading.destroy
+    @water_reading.destroy
     head :no_content
   end
 
   private
 
   def set_customer_profile
-    @customer_profile = current_user.customer_profile
-    render json: { error: 'Customer profile not found' }, status: :not_found unless @customer_profile
+    @customer_profile = CustomerProfile.find(params[:customer_profile_id])
   end
 
-  def set_reading
-    @reading = @customer_profile.water_readings.find_by(id: params[:id])
-    render json: { error: 'Reading not found' }, status: :not_found unless @reading
+  def set_water_reading
+    @water_reading = @customer_profile.water_readings.find(params[:id])
   end
 
   def water_reading_params
     params.require(:water_reading).permit(:reading_date, :consumption)
-  end
-
-  def authorize_customer
-    render json: { error: 'Access denied' }, status: :forbidden unless current_user&.customer?
   end
 end
