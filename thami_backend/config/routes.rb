@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  get "customer_profiles/index"
+  get "customer_profiles/show"
+  get "customer_profiles/create"
+  get "customer_profiles/update"
+  get "customer_profiles/destroy"
   
   post "/login", to: "sessions#create"
   resources :users, only: [:index, :show, :destroy]
