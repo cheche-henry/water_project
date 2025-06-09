@@ -4,7 +4,8 @@ class SessionsController < ApplicationController
 
   # POST /login
   def create
-    user = User.find_by(phone_number: params[:phone_number])
+    user = User.find_by(phone_number: params[:login]) || User.find_by(email: params[:login])
+
     if user&.authenticate(params[:password])
       token = jwt_token(user)
       render json: {
@@ -18,7 +19,7 @@ class SessionsController < ApplicationController
         }
       }, status: :ok
     else
-      render json: { error: "Invalid phone number or password" }, status: :unauthorized
+      render json: { error: "Invalid login or password" }, status: :unauthorized
     end
   end
 
