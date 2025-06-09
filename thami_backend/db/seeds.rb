@@ -1,3 +1,12 @@
+# Create an admin user
+admin = User.create!(
+  name: "Admin User",
+  phone_number: "0712345678",
+  email: "admin@example.com",
+  password: "adminpass",
+  role: :admin
+)
+
 # Create a customer user
 customer = User.create!(
   name: "John Customer",
@@ -36,3 +45,5 @@ Payment.create!(
   transaction_code: "TXN123456",
   paid_at: Time.now
 )
+
+puts "✅ Seeded admin, customer, profile, reading, bill, and payment!"

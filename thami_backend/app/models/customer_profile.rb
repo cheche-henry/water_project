@@ -5,8 +5,9 @@ class CustomerProfile < ApplicationRecord
   validates :address, presence: true
   validate :user_must_be_customer
 
-  has_many :water_readings, dependent: :destroy
   has_many :bills, dependent: :destroy
+  has_many :water_readings, dependent: :destroy
+
 
 
 
