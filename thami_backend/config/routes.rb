@@ -1,19 +1,25 @@
 Rails.application.routes.draw do
-  get "customer_profiles/index"
-  get "customer_profiles/show"
-  get "customer_profiles/create"
-  get "customer_profiles/update"
-  get "customer_profiles/destroy"
-  
+  # Authentication
   post "/login", to: "sessions#create"
+
+  # User management
   resources :users, only: [:index, :show, :destroy]
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Customer profiles
+  resources :customer_profiles, only: [:index, :show, :create, :update, :destroy]
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Water readings (linked to a customer profile)
+  resources :water_readings, only: [:index, :show, :create, :update, :destroy]
+
+  # Bills (linked to customer_profile and water_reading)
+  resources :bills, only: [:index, :show, :create, :update, :destroy]
+
+  # Payments (linked to a bill)
+  resources :payments, only: [:index, :show, :create, :destroy]
+
+  # Health check route (optional)
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # You can define the root if needed
+  # root "welcome#index"
 end
